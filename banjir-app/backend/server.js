@@ -1,30 +1,30 @@
-// Import Express
-const Express = require("express");
+// 1. Load Environment Variables paling awal
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors"); // Pastikan ini sudah diinstall (npm install cors)
+const path = require("path");
 const router = require("./routes/api");
-const db = require("./config/database");
 
-// Membuat object express
-const app = Express();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(Express.json());
-app.use(Express.urlencoded());
-app.use(router);
+// 2. Middleware
+app.use(cors()); // Mengizinkan akses dari Frontend React nantinya
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// test database
-app.get("/test-db", (req ,res) => {
-    db.query("select 1", (err, result) =>{
-        if(err) {
-            res.json({ message: "koneksi database gagal"});
-        } else {
-            res.json({
-                message: "koneksi database berhasil",
-                result: result
-            });
-        }
-    });
-});
+// 3. Static Folder untuk Foto (Agar bisa dibuka di browser)
+// Lokasi: http://localhost:3000/uploads/nama-file.jpg
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
-// pindahkan routing ke routes/api.js
-app.listen(3000, ()=>{
-    console.log("server berjalan di port 3000");
+// 4. Routing
+app.use("/api", router);
+
+// 5. Jalankan Server
+app.listen(PORT, () => {
+    console.log(`=========================================`);
+    console.log(`Server Berhasil Berjalan di Port: ${PORT}`);
+    console.log(`Mode: ${process.env.NODE_ENV || 'Development'}`);
+    console.log(`=========================================`);
 });

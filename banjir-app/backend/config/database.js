@@ -1,20 +1,25 @@
 const mysql = require("mysql2");
+require("dotenv").config();
 
-// koneksi
-const db = mysql.createConnection ({
-    host : "localhost",
-    user : "root",
-    password : "",
-    database : "banjir_db"
+// Menggunakan Pool agar koneksi lebih stabil dan mendukung async/await
+const db = mysql.createPool({
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "banjir_db",
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-// tes koneksi
-db.connect((err)=>{
-    if(err) {
-        console.log("koneksi gagal:", err);
+// Test Koneksi
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error("Database Error:", err.message);
     } else {
-        console.log("koneksi database berhasil");
+        console.log("Database Connected: Berhasil terhubung ke", process.env.DB_NAME);
+        connection.release();
     }
 });
 
-module.exports = db;
+module.exports = db.promise();

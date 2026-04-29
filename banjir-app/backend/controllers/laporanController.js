@@ -1,85 +1,75 @@
-const laporan = require("../models/laporanModels")
-const { response } = require("express");
+const LaporanModel = require("../models/laporanModels");
+const validateLaporan = require("../utils/validation");
+const db = require("../config/database");
 
-class laporanController {
-    
-    // ambil semua
-    index(req, res) {
-        laporan.getAll((err, result)=>{
-            if(err){
-                return res.json({message: "gagal ambil data"});
-            }
-
-            res.json({
-                message: "berhasil ambil semua data",
-                data: result
-            });
-        });
-    }
-
-    // ambil berdasarkan ID
-    show(req, res){
-        const {id} = req.params;
-
-        laporan.getBYId(id, (err, results)=>{
-            if(err){
-                return res.json({message: "data tidak ditemukan"});
-            }
-
-            res.json({
-                message: "detail laporan",
-                data : result[0]
-            });
-        });
-    }
-
-    // Menambahkan Laporan
-    store(req, res) {
-       const  data = req.body;
-
-       laporan.createReport(data, (err)=>{
-        if(err){
-            return res.json({message: "gagal tambahkan data"});
+class LaporanController {
+    async index(req, res) {
+        try {
+            const data = await LaporanModel.getAll();
+            res.json({ message: "Berhasil mengambil semua data laporan", data });
+        } catch (error) {
+            res.status(500).json({ message: "Gagal mengambil data", error: error.message });
         }
-
-        res.json({
-            message: "data berhasil ditambah",
-            data: data
-        });
-       });
     }
 
-    // Updated Laporan
-    update(req, res) {
-        const {id} = req.params;
-        const data = req.body;
-
-        laporan.update(id,  data, (err)=>{
-            if(err){
-              return res.json({message: "gagal update data"});      
-            }
-
-            res.json({
-                message: "data berhasil diupdate"
-            });
-        });
+    async show(req, res) {
+        try {
+            const data = await LaporanModel.getById(req.params.id);
+            if (!data) return res.status(404).json({ message: "Laporan tidak ditemukan" });
+            res.json({ message: "Detail laporan ditemukan", data });
+        } catch (error) {
+            res.status(500).json({ message: "Terjadi kesalahan server", error: error.message });
+        }
     }
 
+    async store(req, res) {
+        try {
+            const { title, description, water_level, latitude, longitude, address } = req.body;
+            const user_id = req.user.id; 
 
-    // Hapus Laporan
-    destroy(req, res) {
-        const {id} = req.params;
-        
-        laporan.deleteReport(id, (err)=>{
-            if(err){
-                return res.json({message: "gagal hapus data"});
+            const dataLaporan = { title, description, water_level, user_id };
+            const errors = validateLaporan(dataLaporan);
+            if (errors.length > 0) return res.status(400).json({ errors });
+
+            const result = await LaporanModel.create(dataLaporan);
+            const reportId = result.insertId;
+
+            if (latitude && longitude) {
+                await db.query(
+                    `INSERT INTO locations (report_id, latitude, longitude, address) VALUES (?, ?, ?, ?)`,
+                    [reportId, latitude, longitude, address]
+                );
             }
 
-            res.json({
-                message: "data berhasil  dihapus"
-            });
-        });
+            if (req.file) {
+                const photoUrl = `/uploads/${req.file.filename}`;
+                await db.query(`INSERT INTO photos (report_id, photo_url) VALUES (?, ?)`, [reportId, photoUrl]);
+            }
+
+            res.status(201).json({ message: "Laporan berhasil ditambahkan", reportId });
+        } catch (error) {
+            res.status(500).json({ message: "Gagal memproses laporan", error: error.message });
+        }
+    }
+
+    async update(req, res) {
+        try {
+            await LaporanModel.update(req.params.id, req.body);
+            res.json({ message: "Data laporan berhasil diperbarui" });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async destroy(req, res) {
+        try {
+            await LaporanModel.delete(req.params.id);
+            res.json({ message: "Laporan berhasil dihapus" });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
     }
 }
 
-module.exports = new laporanController();
+// WAJIB menggunakan 'new' agar yang diekspor adalah instance object-nya
+module.exports = new LaporanController();

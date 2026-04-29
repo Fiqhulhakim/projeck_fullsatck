@@ -1,52 +1,49 @@
 const db = require('../config/database');
 
-// ambil semua laporan
-const getAllReports = (callback) => {
-  const sql = `
-    SELECT reports.*, users.name 
-    FROM reports 
-    JOIN users ON reports.user_id = users.id
-    ORDER BY reports.created_at DESC
-  `;
-  db.query(sql, callback);
-};
+class LaporanModel {
+    static async getAll() {
+        const sql = `
+            SELECT reports.*, users.name as pelapor 
+            FROM reports 
+            JOIN users ON reports.user_id = users.id
+            ORDER BY reports.created_at DESC
+        `;
+        const [rows] = await db.query(sql);
+        return rows;
+    }
 
-// ambil laporan by id
-const getReportById = (id, callback) => {
-  const sql = `SELECT * FROM reports WHERE id = ?`;
-  db.query(sql, [id], callback);
-};
+    static async getById(id) {
+        const sql = `SELECT * FROM reports WHERE id = ?`;
+        const [rows] = await db.query(sql, [id]);
+        return rows[0];
+    }
 
-// tambah laporan
-const createReport = (data, callback) => {
-  const sql = `
-    INSERT INTO reports (user_id, title, description, water_level, status)
-    VALUES (?, ?, ?, ?, 'pending')
-  `;
-  db.query(sql, [
-    data.user_id,
-    data.title,
-    data.description,
-    data.water_level
-  ], callback);
-};
+    static async create(data) {
+        const sql = `
+            INSERT INTO reports (user_id, title, description, water_level, status)
+            VALUES (?, ?, ?, ?, ?)
+        `;
+        const [result] = await db.query(sql, [
+            data.user_id,
+            data.title,
+            data.description,
+            data.water_level,
+            data.status || 'pending'
+        ]);
+        return result;
+    }
 
-// update status laporan
-const updateStatus = (id, status, callback) => {
-  const sql = `UPDATE reports SET status = ? WHERE id = ?`;
-  db.query(sql, [status, id], callback);
-};
+    static async update(id, data) {
+        const sql = `UPDATE reports SET ? WHERE id = ?`;
+        const [result] = await db.query(sql, [data, id]);
+        return result;
+    }
 
-// hapus laporan
-const deleteReport = (id, callback) => {
-  const sql = `DELETE FROM reports WHERE id = ?`;
-  db.query(sql, [id], callback);
-};
+    static async delete(id) {
+        const sql = `DELETE FROM reports WHERE id = ?`;
+        const [result] = await db.query(sql, [id]);
+        return result;
+    }
+}
 
-module.exports = {
-  getAllReports,
-  getReportById,
-  createReport,
-  updateStatus,
-  deleteReport
-};
+module.exports = LaporanModel;
