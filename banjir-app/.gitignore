@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+myapp-frontend/node_modules/
+
+# Environment variables (JANGAN upload .env!)
+.env
+backend/.env
+
+# Build output
+dist/
+build/
+frontend/dist/
+myapp-frontend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.DS_Store
+
+# Uploads (file foto user)
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
