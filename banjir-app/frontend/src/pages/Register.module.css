@@ -1,0 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+
+/* ── Wrapper ─────────────────────────────────────────── */
+.wrapper {
+  min-height: 100vh;
+  background: #0c0f1a;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Sora', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.wrapper::before {
+  content: '';
+  position: fixed;
+  top: -30%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 179, 237, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.wrapper::after {
+  content: '';
+  position: fixed;
+  bottom: -20%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Body ────────────────────────────────────────────── */
+.body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* ── Card ────────────────────────────────────────────── */
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  padding: 2.5rem 2.5rem;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Badge ───────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(154, 117, 234, 0.12);
+  border: 1px solid rgba(154, 117, 234, 0.25);
+  color: #b794f4;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 1.2rem;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #b794f4;
+  box-shadow: 0 0 6px #b794f4;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Title ───────────────────────────────────────────── */
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  color: #f0f4ff;
+  margin: 0 0 0.35rem;
+  line-height: 1.2;
+}
+
+.title em {
+  font-style: italic;
+  color: #b794f4;
+}
+
+.subtitle {
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.32);
+  margin: 0 0 1.8rem;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* ── Form group ──────────────────────────────────────── */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+/* ── Input ───────────────────────────────────────────── */
+.inputWrapper {
+  position: relative;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #f0f4ff;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.86rem;
+  padding: 11px 14px 11px 40px;
+  outline: none;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.16);
+}
+
+.input:focus {
+  border-color: rgba(154, 117, 234, 0.5);
+  background: rgba(154, 117, 234, 0.05);
+  box-shadow: 0 0 0 3px rgba(154, 117, 234, 0.08);
+}
+
+.inputWrapper:focus-within .inputIcon {
+  color: rgba(154, 117, 234, 0.6);
+}
+
+/* ── Password toggle ─────────────────────────────────── */
+.pwToggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.pwToggle:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Submit button ───────────────────────────────────── */
+.btnRegister {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 13px;
+  background: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 8px 24px rgba(159, 122, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btnRegister::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btnRegister:hover::after { opacity: 1; }
+
+.btnRegister:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(159, 122, 234, 0.4);
+}
+
+.btnRegister:active { transform: translateY(0); }
+
+.btnRegister.loading {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* ── Spinner ─────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Divider ─────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.6rem 0;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.73rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Login row ───────────────────────────────────────── */
+.loginRow {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.loginRow a {
+  color: #b794f4;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.loginRow a:hover { color: #d6bcfa; }
+
+/* ── Alerts ──────────────────────────────────────────── */
+.errorMsg {
+  background: rgba(252, 129, 74, 0.1);
+  border: 1px solid rgba(252, 129, 74, 0.25);
+  color: #fc814a;
+  font-size: 0.78rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.successMsg {
+  background: rgba(104, 211, 145, 0.1);
+  border: 1px solid rgba(104, 211, 145, 0.25);
+  color: #68d391;
+  font-size: 0.78rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
