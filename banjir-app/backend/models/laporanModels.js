@@ -1,9 +1,13 @@
 const db = require('../config/database');
 
 class LaporanModel {
+
+    // ✅ GET ALL
     static async getAll() {
         const sql = `
-            SELECT reports.*, users.name as pelapor 
+            SELECT 
+                reports.*, 
+                users.name AS pelapor
             FROM reports 
             JOIN users ON reports.user_id = users.id
             ORDER BY reports.created_at DESC
@@ -12,12 +16,22 @@ class LaporanModel {
         return rows;
     }
 
+    // ✅ GET BY ID
     static async getById(id) {
-        const sql = `SELECT * FROM reports WHERE id = ?`;
+        const sql = `
+            SELECT 
+                reports.*, 
+                users.name AS pelapor,
+                users.email
+            FROM reports
+            JOIN users ON reports.user_id = users.id
+            WHERE reports.id = ?
+        `;
         const [rows] = await db.query(sql, [id]);
         return rows[0];
     }
 
+    // ✅ CREATE
     static async create(data) {
         const sql = `
             INSERT INTO reports (user_id, title, description, water_level, status)
@@ -33,12 +47,29 @@ class LaporanModel {
         return result;
     }
 
+    // 🔥 UPDATE (FIX — TANPA SET ?)
     static async update(id, data) {
-        const sql = `UPDATE reports SET ? WHERE id = ?`;
-        const [result] = await db.query(sql, [data, id]);
+        const { title, description, water_level, status } = data;
+
+        const sql = `
+            UPDATE reports 
+            SET title = ?, description = ?, water_level = ?, status = ?
+            WHERE id = ?
+        `;
+
+        const values = [
+            title,
+            description,
+            water_level,
+            status || 'pending',
+            id
+        ];
+
+        const [result] = await db.query(sql, values);
         return result;
     }
 
+    // ✅ DELETE
     static async delete(id) {
         const sql = `DELETE FROM reports WHERE id = ?`;
         const [result] = await db.query(sql, [id]);
