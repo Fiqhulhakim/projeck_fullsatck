@@ -1,21 +1,32 @@
-function validateLaporan(data) {
-    const errors = [];
+// Validasi data laporan sebelum disimpan ke database
+// Dipakai di laporanController.js: const validateLaporan = require('../utils/validation');
 
-    if (!data.title) errors.push("Judul laporan wajib diisi");
-    if (!data.user_id) errors.push("User ID wajib diisi");
-    
-    if (data.water_level == null) {
-        errors.push("Tinggi air wajib diisi");
-    } else if (isNaN(data.water_level)) {
-        errors.push("Tinggi air harus berupa angka");
-    }
+const validateLaporan = (data) => {
+  const errors = [];
 
-    const allowedStatus = ["pending", "aman", "siaga", "bahaya"];
-    if (data.status && !allowedStatus.includes(data.status)) {
-        errors.push("Status tidak valid");
-    }
+  if (!data.title || data.title.trim() === "") {
+    errors.push("Judul laporan wajib diisi");
+  } else if (data.title.length > 255) {
+    errors.push("Judul maksimal 255 karakter");
+  }
 
-    return errors;
-}
+  if (!data.description || data.description.trim() === "") {
+    errors.push("Deskripsi wajib diisi");
+  }
+
+  if (data.water_level === undefined || data.water_level === null || data.water_level === "") {
+    errors.push("Ketinggian air wajib diisi");
+  } else if (isNaN(data.water_level)) {
+    errors.push("Ketinggian air harus berupa angka");
+  } else if (Number(data.water_level) < 0) {
+    errors.push("Ketinggian air tidak boleh negatif");
+  }
+
+  if (!data.user_id) {
+    errors.push("User ID wajib ada");
+  }
+
+  return errors; // [] artinya valid
+};
 
 module.exports = validateLaporan;
