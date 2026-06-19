@@ -1,0 +1,197 @@
+/* Base */
+.container {
+  background-color: #0f3460;
+  position: relative;
+}
+.container::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, #00b4d8, #0077b6, #023e8a);
+}
+
+/* Navbar row */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 64px;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brandIcon {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 180, 216, 0.15);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00b4d8;
+  font-size: 18px;
+}
+.brandText {
+  display: flex;
+  flex-direction: column;
+}
+.brandTitle {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+.brandSub {
+  color: #90e0ef;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Desktop links */
+.navLinks {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 13.5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.navLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+.navLink.active {
+  color: #00b4d8;
+  background: rgba(0, 180, 216, 0.12);
+}
+
+/* Login button */
+.loginBtn {
+  background: #00b4d8;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 6px 16px;
+}
+.loginBtn:hover {
+  background: #0096c7 !important;
+}
+
+/* Logout button */
+.logoutBtn {
+  color: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 5px 14px;
+}
+.logoutBtn:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Hamburger */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.barTop { transform: rotate(45deg) translate(4px, 4px); }
+.barMid { opacity: 0; }
+.barBot { transform: rotate(-45deg) translate(4px, -4px); }
+
+/* Mobile menu */
+.mobileMenu {
+  background: #0a2744;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.mobileLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+.mobileLink:hover,
+.mobileLink.active {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+.mobileLink.active {
+  color: #00b4d8;
+}
+.mobileDivider {
+  border: none;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+  margin: 6px 8px;
+}
+.mobileLoginBtn {
+  background: #00b4d8;
+  color: #fff !important;
+  justify-content: center;
+  font-weight: 500;
+  border-radius: 8px;
+}
+.mobileLoginBtn:hover {
+  background: #0096c7 !important;
+}
+.mobileLogoutBtn {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+.mobileLogoutBtn:hover {
+  color: #fc8181 !important;
+  background: rgba(252, 129, 129, 0.08) !important;
+}
+
+/* Medium screen — show desktop links, hide hamburger */
+@media (min-width: 768px) {
+  .navLinks { display: flex; }
+  .hamburger { display: none; }
+}
