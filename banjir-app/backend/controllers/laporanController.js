@@ -92,20 +92,26 @@ class LaporanController {
   }
 
   // ✅ PATCH /api/laporan/:id/verify — admin only
+  //    Konversi status ke level darurat berdasarkan water_level
   async verify(req, res) {
     try {
       const laporan = await LaporanModel.getById(req.params.id);
       if (!laporan) {
         return res.status(404).json({ message: "Laporan tidak ditemukan" });
       }
-      if (laporan.status === "verified") {
+      if (laporan.status === "verified" || ["aman","waspada","siaga","bahaya"].includes(laporan.status)) {
         return res.status(400).json({ message: "Laporan sudah diverifikasi sebelumnya" });
       }
+      const wl = Number(laporan.water_level);
+      let levelDarurat = "aman";
+      if (wl >= 100) levelDarurat = "bahaya";
+      else if (wl >= 60) levelDarurat = "siaga";
+      else if (wl >= 30) levelDarurat = "waspada";
       await db.query(
-        `UPDATE reports SET status = 'verified' WHERE id = ?`,
-        [req.params.id]
+        `UPDATE reports SET status = ? WHERE id = ?`,
+        [levelDarurat, req.params.id]
       );
-      res.json({ message: "Laporan berhasil diverifikasi" });
+      res.json({ message: `Laporan diverifikasi — status: ${levelDarurat}` });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

@@ -80,8 +80,7 @@ function Navbar() {
       </nav>
 
       {/* Mobile Menu */}
-      {menuOpen && (
-        <div className={styles.mobileMenu}>
+      <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileOpen : ""}`}>
           {[
             { to: "/",              label: "Home",           icon: "ti-home-2"          },
             { to: "/buat-laporan",  label: "Buat Laporan",   icon: "ti-file-plus"       },
@@ -110,8 +109,7 @@ function Navbar() {
             </Link>
           )}
         </div>
-      )}
-    </div>
+      </div>
   );
 }
 

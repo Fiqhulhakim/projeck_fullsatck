@@ -17,8 +17,24 @@ export const STATUS_COLOR = {
   siaga:   { bg: "#fef3c7", text: "#92400e" },
   bahaya:  { bg: "#fee2e2", text: "#991b1b" },
   pending: { bg: "#f3f4f6", text: "#374151" },
+  verified:{ bg: "#f0fdf4", text: "#166534" },
+  rejected:{ bg: "#fef2f2", text: "#991b1b" },
 };
 
 export const STATUS_ICON = {
-  aman:"✅", waspada:"🔵", siaga:"⚠", bahaya:"🔴", pending:"⏳",
+  aman:"ti-circle-check",
+  waspada:"ti-wave-sine",
+  siaga:"ti-alert-triangle",
+  bahaya:"ti-alert-octagon",
+  pending:"ti-clock",
+  verified:"ti-shield-check",
+  rejected:"ti-x-circle",
+};
+
+export const waterLevelToStatus = (wl) => {
+  const level = Number(wl);
+  if (level >= 100) return "bahaya";
+  if (level >= 60) return "siaga";
+  if (level >= 30) return "waspada";
+  return "aman";
 };

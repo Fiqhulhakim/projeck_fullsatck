@@ -3,6 +3,7 @@ const router  = express.Router();
 const laporanController   = require("../controllers/laporanController");
 const authController      = require("../controllers/authController");
 const dashboardController = require("../controllers/dashboardController");
+const userController      = require("../controllers/userController");
 const { verifyToken, verifyAdmin } = require("../middleware/authMiddleware");
 const upload        = require("../middleware/uploadMiddleware");
 const authorizeRole = require("../middleware/roleMiddleware");
@@ -27,5 +28,9 @@ router.get("/dashboard/ketinggian-per-wilayah", verifyToken, dashboardController
 router.get("/dashboard/distribusi-status",      verifyToken, dashboardController.getDistribusiStatus);
 router.get("/dashboard/laporan-per-hari",       verifyToken, dashboardController.getLaporanPerHari);
 router.get("/dashboard/per-kecamatan",          verifyToken, dashboardController.getPerKecamatan);
+
+// ── Users ─────────────────────────────────────────────────
+router.get(   "/users",       verifyToken, verifyAdmin, userController.index);
+router.delete("/users/:id",   verifyToken, verifyAdmin, userController.destroy);
 
 module.exports = router;

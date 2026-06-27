@@ -10,12 +10,22 @@ function ReportForm() {
   const [error, setError]     = useState("");
   const [success, setSuccess] = useState("");
   const [foto, setFoto]       = useState(null);
+  const [preview, setPreview] = useState(null);
   const [form, setForm]       = useState({
     title: "", wilayah: "", description: "",
     water_level: "", status: "pending", address: "",
   });
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setFoto(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setPreview(reader.result);
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,65 +63,68 @@ function ReportForm() {
   return (
     <div className={styles.container}>
       <div className={styles.wrap}>
-
-        {/* Header */}
         <div className={styles.formHeader}>
-          <div className={styles.formBadge}>
-            <i className="ti ti-file-plus" aria-hidden="true" />
+          <span className={styles.formBadge}>
+            <i className="ti ti-file-plus" />
             Buat Laporan
-          </div>
-          <p className={styles.formTitle}>Laporkan Banjir di Depok</p>
+          </span>
+          <h1 className={styles.formTitle}>Laporkan Banjir di Depok</h1>
           <p className={styles.formSub}>Isi form di bawah untuk melaporkan kejadian banjir</p>
         </div>
 
-        {/* Body */}
         <div className={styles.formBody}>
-          {error   && <div className={styles.errorMsg}>⚠ {error}</div>}
-          {success && <div className={styles.successMsg}>✅ {success}</div>}
+          {error && (
+            <div className={styles.alertError}>
+              <i className="ti ti-alert-triangle" /> {error}
+            </div>
+          )}
+          {success && (
+            <div className={styles.alertSuccess}>
+              <i className="ti ti-circle-check" /> {success}
+            </div>
+          )}
 
           <p className={styles.sectionLabel}>Informasi Utama</p>
 
           <div className={styles.row2}>
-            <div className={styles.form__group}>
-              <label><i className="ti ti-map-pin" aria-hidden="true" />Wilayah <span className={styles.req}>*</span></label>
+            <div className={styles.field}>
+              <label><i className="ti ti-map-pin" />Wilayah <span className={styles.req}>*</span></label>
               <select name="wilayah" value={form.wilayah} onChange={handleChange} required>
                 <option value="">-- Pilih Kecamatan --</option>
                 {WILAYAH_DEPOK.map(w => <option key={w} value={w}>{w}</option>)}
               </select>
             </div>
-
-            <div className={styles.form__group}>
-              <label><i className="ti ti-droplet" aria-hidden="true" />Ketinggian Air <span className={styles.req}>*</span></label>
+            <div className={styles.field}>
+              <label><i className="ti ti-droplet" />Ketinggian Air <span className={styles.req}>*</span></label>
               <input type="number" name="water_level" placeholder="Contoh: 80"
                 min="0" value={form.water_level} onChange={handleChange} required />
               <span className={styles.hint}>dalam satuan cm</span>
             </div>
           </div>
 
-          <div className={styles.form__group}>
-            <label><i className="ti ti-pencil" aria-hidden="true" />Judul Laporan <span className={styles.req}>*</span></label>
+          <div className={styles.field}>
+            <label><i className="ti ti-pencil" />Judul Laporan <span className={styles.req}>*</span></label>
             <input type="text" name="title" placeholder="Contoh: Banjir di Jl. Margonda Raya"
               value={form.title} onChange={handleChange} required />
           </div>
 
           <div className={styles.row2}>
-            <div className={styles.form__group}>
-              <label><i className="ti ti-alert-triangle" aria-hidden="true" />Status</label>
+            <div className={styles.field}>
+              <label><i className="ti ti-alert-triangle" />Status</label>
               <select name="status" value={form.status} onChange={handleChange}>
                 <option value="pending">Belum diverifikasi</option>
                 {STATUS_BANJIR.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
             </div>
-
-            <div className={styles.form__group}>
-              <label><i className="ti ti-home" aria-hidden="true" />Alamat</label>
+            <div className={styles.field}>
+              <label><i className="ti ti-home" />Alamat</label>
               <input type="text" name="address" placeholder="Jl. Margonda No.100"
                 value={form.address} onChange={handleChange} />
             </div>
           </div>
 
-          <div className={styles.form__group}>
-            <label><i className="ti ti-notes" aria-hidden="true" />Deskripsi <span className={styles.req}>*</span></label>
+          <div className={styles.field}>
+            <label><i className="ti ti-notes" />Deskripsi <span className={styles.req}>*</span></label>
             <textarea rows="3" name="description"
               placeholder="Jelaskan kondisi banjir secara detail..."
               value={form.description} onChange={handleChange} required />
@@ -121,22 +134,35 @@ function ReportForm() {
           <p className={styles.sectionLabel}>Foto Dokumentasi</p>
 
           <div className={styles.fileArea} onClick={() => document.getElementById('fotoInput').click()}>
-            <i className="ti ti-cloud-upload file-icon" aria-hidden="true" style={{ fontSize:"24px", color:"#00b4d8" }} />
-            <p className={styles.fileText}>
-              {foto ? foto.name : "Klik atau seret foto ke sini"}
+            {preview ? (
+              <img src={preview} alt="Preview" className={styles.preview} />
+            ) : (
+              <>
+                <i className="ti ti-cloud-upload" />
+                <p className={styles.fileText}>Klik atau seret foto ke sini</p>
+              </>
+            )}
+            <p className={styles.fileHint}>
+              {foto ? foto.name : "JPG, PNG, WEBP · Maks 5MB"}
             </p>
-            <p className={styles.fileHint}>JPG, PNG, WEBP · Maks 5MB</p>
             <input id="fotoInput" type="file" accept="image/jpeg,image/png,image/webp"
-              style={{ display:"none" }} onChange={(e) => setFoto(e.target.files[0])} />
+              style={{ display:"none" }} onChange={handleFile} />
           </div>
 
-          <div className={styles.btnRow}>
-            <button type="button" className={styles.form__button} disabled={loading}
-              onClick={handleSubmit}>
-              <i className="ti ti-send" aria-hidden="true" />
-              {loading ? "Mengirim..." : "Kirim Laporan"}
+          {preview && (
+            <button type="button" className={styles.btnRemove}
+              onClick={() => { setFoto(null); setPreview(null); }}>
+              <i className="ti ti-x" /> Hapus Foto
             </button>
-          </div>
+          )}
+
+          <button type="button" className={styles.btnSubmit} disabled={loading} onClick={handleSubmit}>
+            {loading ? (
+              <><span className={styles.spinner} /> Mengirim...</>
+            ) : (
+              <><i className="ti ti-send" /> Kirim Laporan</>
+            )}
+          </button>
         </div>
       </div>
     </div>

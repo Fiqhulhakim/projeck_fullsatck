@@ -143,6 +143,14 @@
   padding: 8px;
   display: flex;
   flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.mobileOpen {
+  max-height: 400px;
+  padding: 8px;
 }
 .mobileLink {
   display: flex;

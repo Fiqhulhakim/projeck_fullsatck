@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { registerUser } from "../services/api";
@@ -46,81 +46,154 @@ function Register() {
     }
   };
 
+  const isFieldActive = (key) => form[key].length > 0;
+
+  const particles = useMemo(() =>
+    [...Array(12)].map((_, i) => ({
+      key: i,
+      style: {
+        left: `${(i * 37 + 13) % 100}%`,
+        animationDelay: `${(i * 0.7) % 8}s`,
+        animationDuration: `${6 + (i % 6)}s`,
+        width: `${4 + (i % 6)}px`,
+        height: `${4 + (i % 6)}px`,
+        opacity: 0.15 + ((i * 0.03) % 0.25),
+      },
+    })), []);
+
   return (
     <div className={styles.wrapper}>
+      <div className={styles.particles}>
+        {particles.map(p => (
+          <span key={p.key} className={styles.drop} style={p.style} />
+        ))}
+      </div>
       <Navbar />
       <div className={styles.body}>
         <div className={styles.card}>
-          <div className={styles.badge}>Buat Akun Baru</div>
-          <h1 className={styles.title}>Daftar <em>Sekarang</em></h1>
-          <p className={styles.subtitle}>
-            Bergabung untuk melaporkan dan memantau banjir di Depok
-          </p>
-
-          {error   && <div className={styles.errorMsg}>⚠ {error}</div>}
-          {success && <div className={styles.successMsg}>✅ {success}</div>}
-
-          <div>
-            {/* Nama */}
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Nama Lengkap</label>
-              <div className={styles.inputWrapper}>
-                <input className={styles.input} type="text" name="name"
-                  placeholder="Masukkan nama lengkap"
-                  value={form.name} onChange={handleChange} autoComplete="name" />
-                <span className={styles.inputIcon}>👤</span>
+          <div className={styles.illustration}>
+            <div className={styles.waveWrap}>
+              <svg className={styles.waveSvg} viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <path className={styles.wave1} fill="rgba(124,58,237,0.2)"
+                  d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,208C960,192,1056,160,1152,149.3C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+                <path className={styles.wave2} fill="rgba(124,58,237,0.1)"
+                  d="M0,224L48,218.7C96,213,192,203,288,208C384,213,480,235,576,234.7C672,235,768,213,864,208C960,203,1056,213,1152,218.7C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+              </svg>
+            </div>
+            <div className={styles.illustContent}>
+              <div className={styles.illustIcon}>
+                <i className="ti ti-user-plus" />
+              </div>
+              <h2 className={styles.illustTitle}>Bergabunglah Sekarang</h2>
+              <p className={styles.illustDesc}>
+                Buat akun dan mulai laporkan kondisi banjir di sekitar Anda untuk membantu masyarakat Depok.
+              </p>
+              <div className={styles.features}>
+                <div className={styles.feature}>
+                  <i className="ti ti-circle-check" />
+                  <span>Laporkan banjir real-time</span>
+                </div>
+                <div className={styles.feature}>
+                  <i className="ti ti-eye" />
+                  <span>Pantau status terkini</span>
+                </div>
+                <div className={styles.feature}>
+                  <i className="ti ti-bell" />
+                  <span>Dapatkan notifikasi area rawan</span>
+                </div>
               </div>
             </div>
-
-            {/* Email */}
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Email</label>
-              <div className={styles.inputWrapper}>
-                <input className={styles.input} type="email" name="email"
-                  placeholder="nama@email.com"
-                  value={form.email} onChange={handleChange} autoComplete="email" />
-                <span className={styles.inputIcon}>✉</span>
-              </div>
-            </div>
-
-            {/* Password */}
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Password</label>
-              <div className={styles.inputWrapper}>
-                <input className={styles.input} name="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Minimal 6 karakter"
-                  value={form.password} onChange={handleChange} />
-                <span className={styles.inputIcon}>🔒</span>
-                <button type="button" className={styles.pwToggle}
-                  onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? "🙈" : "👁"}
-                </button>
-              </div>
-            </div>
-
-            {/* Konfirmasi Password */}
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Konfirmasi Password</label>
-              <div className={styles.inputWrapper}>
-                <input className={styles.input} name="confirmPassword"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Ulangi password"
-                  value={form.confirmPassword} onChange={handleChange} />
-                <span className={styles.inputIcon}>🔒</span>
-              </div>
-            </div>
-
-            <button type="button" disabled={loading}
-              className={`${styles.btnRegister}${loading ? ` ${styles.loading}` : ""}`}
-              onClick={handleSubmit}>
-              {loading ? <><span className={styles.spinner} />Memproses...</> : "Daftar →"}
-            </button>
           </div>
 
-          <div className={styles.divider}>atau</div>
-          <div className={styles.loginRow}>
-            Sudah punya akun? <a href="/login">Masuk sekarang</a>
+          <div className={styles.formPanel}>
+            <div className={styles.formHeader}>
+              <span className={styles.badge}>
+                <i className="ti ti-user-plus" /> Daftar Akun
+              </span>
+              <h1 className={styles.title}>
+                Buat <span className={styles.accent}>Akun</span>
+              </h1>
+              <p className={styles.subtitle}>
+                Isi data diri Anda untuk mendaftar
+              </p>
+            </div>
+
+            {error && (
+              <div className={styles.alert}>
+                <i className="ti ti-alert-triangle" />
+                <span>{error}</span>
+                <button className={styles.alertClose} onClick={() => setError("")}>
+                  <i className="ti ti-x" />
+                </button>
+              </div>
+            )}
+            {success && (
+              <div className={styles.alertSuccess}>
+                <i className="ti ti-circle-check" />
+                <span>{success}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={`${styles.field} ${isFieldActive("name") ? styles.fieldActive : ""}`}>
+                <div className={styles.inputWrap}>
+                  <i className={`ti ti-user ${styles.inputIcon}`} />
+                  <input className={styles.input} type="text" name="name" autoComplete="name" id="reg-name"
+                    value={form.name} onChange={handleChange} />
+                  <label htmlFor="reg-name" className={styles.floatingLabel}>Nama Lengkap</label>
+                </div>
+              </div>
+
+              <div className={`${styles.field} ${isFieldActive("email") ? styles.fieldActive : ""}`}>
+                <div className={styles.inputWrap}>
+                  <i className={`ti ti-mail ${styles.inputIcon}`} />
+                  <input className={styles.input} type="email" name="email" autoComplete="email" id="reg-email"
+                    value={form.email} onChange={handleChange} />
+                  <label htmlFor="reg-email" className={styles.floatingLabel}>Alamat Email</label>
+                </div>
+              </div>
+
+              <div className={`${styles.field} ${isFieldActive("password") ? styles.fieldActive : ""}`}>
+                <div className={styles.inputWrap}>
+                  <i className={`ti ti-lock ${styles.inputIcon}`} />
+                  <input className={styles.input} type={showPassword ? "text" : "password"} name="password"
+                    autoComplete="new-password" id="reg-password"
+                    value={form.password} onChange={handleChange} />
+                  <label htmlFor="reg-password" className={styles.floatingLabel}>Password</label>
+                  <button type="button" className={styles.pwToggle}
+                    onClick={() => setShowPassword(!showPassword)} tabIndex={-1} aria-label="Toggle password">
+                    <i className={`ti ${showPassword ? "ti-eye-off" : "ti-eye"}`} />
+                  </button>
+                </div>
+              </div>
+
+              <div className={`${styles.field} ${isFieldActive("confirmPassword") ? styles.fieldActive : ""}`}>
+                <div className={styles.inputWrap}>
+                  <i className={`ti ti-lock ${styles.inputIcon}`} />
+                  <input className={styles.input} type={showPassword ? "text" : "password"} name="confirmPassword"
+                    autoComplete="new-password" id="reg-confirm"
+                    value={form.confirmPassword} onChange={handleChange} />
+                  <label htmlFor="reg-confirm" className={styles.floatingLabel}>Konfirmasi Password</label>
+                </div>
+              </div>
+
+              <button type="submit" disabled={loading}
+                className={`${styles.btnPrimary} ${loading ? styles.btnLoading : ""}`}>
+                {loading ? (
+                  <><span className={styles.spinner} />Memproses...</>
+                ) : (
+                  <>Buat Akun <i className="ti ti-arrow-right" /></>
+                )}
+              </button>
+            </form>
+
+            <div className={styles.divider}>
+              <span>atau</span>
+            </div>
+
+            <p className={styles.switchLink}>
+              Sudah punya akun? <a href="/login">Masuk sekarang</a>
+            </p>
           </div>
         </div>
       </div>

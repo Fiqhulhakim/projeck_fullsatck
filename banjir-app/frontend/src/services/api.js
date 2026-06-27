@@ -94,6 +94,32 @@ export const getPerKecamatan = async () => {
   return res.json();
 };
 
+export const getLaporanPerHari = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/dashboard/laporan-per-hari`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.json();
+};
+
+// ── Users (Admin) ─────────────────────────────────────────
+export const getUsers = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/users`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.json();
+};
+
+export const deleteUser = async (id) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/users/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.json();
+};
+
 // ── Helper ────────────────────────────────────────────────
 export const isLoggedIn = () => !!localStorage.getItem("token");
 

@@ -72,8 +72,9 @@ CREATE TABLE `reports` (
   `user_id` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
+  `wilayah` varchar(100) DEFAULT NULL,
   `water_level` int(11) DEFAULT NULL,
-  `status` enum('pending','verified','rejected') DEFAULT 'pending',
+  `status` enum('pending','verified','rejected','aman','siaga','waspada','bahaya') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -81,10 +82,10 @@ CREATE TABLE `reports` (
 -- Dumping data untuk tabel `reports`
 --
 
-INSERT INTO `reports` (`id`, `user_id`, `title`, `description`, `water_level`, `status`, `created_at`) VALUES
-(4, 1, 'Banjir Proklamasi', 'Air mulai naik ke jalan', 50, 'verified', '2026-04-16 08:56:00'),
-(5, 2, 'Banjir Depok Timur', 'Air sangat tinggi', 70, 'pending', '2026-04-16 08:56:00'),
-(6, 3, 'Banjir Depok Selatan', 'Air cukup tinggi', 65, 'pending', '2026-04-16 08:56:00');
+INSERT INTO `reports` (`id`, `user_id`, `title`, `description`, `wilayah`, `water_level`, `status`, `created_at`) VALUES
+(4, 1, 'Banjir Proklamasi', 'Air mulai naik ke jalan', 'Pancoran Mas', 50, 'verified', '2026-04-16 08:56:00'),
+(5, 2, 'Banjir Depok Timur', 'Air sangat tinggi', 'Cimanggis', 70, 'pending', '2026-04-16 08:56:00'),
+(6, 3, 'Banjir Depok Selatan', 'Air cukup tinggi', 'Sawangan', 65, 'pending', '2026-04-16 08:56:00');
 
 -- --------------------------------------------------------
 
@@ -106,9 +107,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`) VALUES
-(1, 'Budi', 'budi@gmail.com', '123', 'user', '2026-04-16 08:55:29'),
-(2, 'Mbappe', 'mbappe@gmail.com', '123', 'user', '2026-04-16 08:55:29'),
-(3, 'Ronaldo', 'ronaldo@gmail.com', '123', 'user', '2026-04-16 08:55:29');
+(1, 'Budi', 'budi@gmail.com', '$2b$10$Jhz7XxwUWyY3q3k91cqw7OFwgmsLGpCLmRMfU.mZ5oIpVEVI8PZni', 'user', '2026-04-16 08:55:29'),
+(2, 'Mbappe', 'mbappe@gmail.com', '$2b$10$Jhz7XxwUWyY3q3k91cqw7OFwgmsLGpCLmRMfU.mZ5oIpVEVI8PZni', 'user', '2026-04-16 08:55:29'),
+(3, 'Ronaldo', 'ronaldo@gmail.com', '$2b$10$Jhz7XxwUWyY3q3k91cqw7OFwgmsLGpCLmRMfU.mZ5oIpVEVI8PZni', 'user', '2026-04-16 08:55:29');
 
 --
 -- Indexes for dumped tables

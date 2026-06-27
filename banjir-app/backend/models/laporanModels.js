@@ -34,13 +34,14 @@ class LaporanModel {
     // ✅ CREATE
     static async create(data) {
         const sql = `
-            INSERT INTO reports (user_id, title, description, water_level, status)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO reports (user_id, title, description, wilayah, water_level, status)
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
         const [result] = await db.query(sql, [
             data.user_id,
             data.title,
             data.description,
+            data.wilayah || null,
             data.water_level,
             data.status || 'pending'
         ]);
@@ -49,17 +50,18 @@ class LaporanModel {
 
     // 🔥 UPDATE (FIX — TANPA SET ?)
     static async update(id, data) {
-        const { title, description, water_level, status } = data;
+        const { title, description, wilayah, water_level, status } = data;
 
         const sql = `
             UPDATE reports 
-            SET title = ?, description = ?, water_level = ?, status = ?
+            SET title = ?, description = ?, wilayah = ?, water_level = ?, status = ?
             WHERE id = ?
         `;
 
         const values = [
             title,
             description,
+            wilayah || null,
             water_level,
             status || 'pending',
             id
