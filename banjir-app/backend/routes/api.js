@@ -1,6 +1,7 @@
 const express = require("express");
 const router  = express.Router();
 const laporanController   = require("../controllers/laporanController");
+const photoController     = require("../controllers/photoController");
 const dashboardController = require("../controllers/dashboardController");
 const userController      = require("../controllers/userController");
 const { verifyToken, verifyAdmin } = require("../middleware/authMiddleware");
@@ -14,6 +15,7 @@ router.post(  "/laporan",            verifyToken, upload.single("photo"), lapora
 router.put(   "/laporan/:id",        verifyToken, laporanController.update);
 router.delete("/laporan/:id",        verifyToken, verifyAdmin, laporanController.destroy);
 router.patch( "/laporan/:id/verify", verifyToken, verifyAdmin, laporanController.verify); // ✅ tambah
+router.get(  "/laporan/:id/photos", photoController.getByReport);
 
 // ── Dashboard ─────────────────────────────────────────────
 router.get("/dashboard/stats",                  verifyToken, dashboardController.getStats);

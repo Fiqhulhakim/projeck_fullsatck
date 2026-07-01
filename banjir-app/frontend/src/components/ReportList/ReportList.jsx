@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ReportCard from "../ReportCard/ReportCard";
+import ReportDetailModal from "../ReportDetailModal/ReportDetailModal";
 import { getLaporan, deleteLaporan, verifikasiLaporan } from "../../services/api";
 import styles from "./ReportList.module.css";
 
@@ -28,6 +29,7 @@ function ReportList() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState("");
+  const [selectedReport, setSelectedReport] = useState(null);
 
   useEffect(() => {
     getLaporan()
@@ -44,6 +46,10 @@ function ReportList() {
     } catch {
       setError("Gagal menghapus laporan.");
     }
+  };
+
+  const handleCardClick = (report) => {
+    setSelectedReport(report);
   };
 
   const handleVerify = async (id) => {
@@ -107,6 +113,7 @@ function ReportList() {
               <ReportCard
                 key={r.id}
                 report={r}
+                onClick={handleCardClick}
                 onDelete={handleDelete}
                 onVerify={handleVerify}
               />
@@ -114,6 +121,13 @@ function ReportList() {
           </div>
         )}
       </section>
+
+      {selectedReport && (
+        <ReportDetailModal
+          report={selectedReport}
+          onClose={() => setSelectedReport(null)}
+        />
+      )}
     </div>
   );
 }

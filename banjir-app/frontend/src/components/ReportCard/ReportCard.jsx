@@ -19,7 +19,7 @@ function getDisplayStatus(report) {
   return s;
 }
 
-function ReportCard({ report, onDelete, onVerify }) {
+function ReportCard({ report, onDelete, onVerify, onClick }) {
   const { isAdmin } = useRole();
   const key    = getDisplayStatus(report);
   const config = statusConfig[key] ?? statusConfig.pending;
@@ -31,8 +31,17 @@ function ReportCard({ report, onDelete, onVerify }) {
       })
     : null;
 
+  const handleClick = () => {
+    if (onClick) onClick(report);
+  };
+
+  const handleAction = (e, fn) => {
+    e.stopPropagation();
+    fn();
+  };
+
   return (
-    <div className={`${styles.card} ${config.cls}`}>
+    <div className={`${styles.card} ${config.cls}`} onClick={handleClick} style={{ cursor: "pointer" }}>
       <div className={styles.topAccent} />
       <div className={styles.body}>
         <div className={styles.headerGroup}>
@@ -60,11 +69,11 @@ function ReportCard({ report, onDelete, onVerify }) {
         {isAdmin && (
           <div className={styles.adminActions}>
             {key !== "verified" && (
-              <button className={styles.btnVerify} onClick={() => onVerify?.(report.id)}>
+              <button className={styles.btnVerify} onClick={(e) => handleAction(e, () => onVerify?.(report.id))}>
                 <i className="ti ti-circle-check" /> Verifikasi
               </button>
             )}
-            <button className={styles.btnDelete} onClick={() => onDelete?.(report.id)}>
+            <button className={styles.btnDelete} onClick={(e) => handleAction(e, () => onDelete?.(report.id))}>
               <i className="ti ti-trash" /> Hapus
             </button>
           </div>

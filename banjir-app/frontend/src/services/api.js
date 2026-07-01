@@ -35,6 +35,16 @@ export const createLaporan = async (formData) => {
   return res.json();
 };
 
+export const getLaporanById = async (id) => {
+  const res = await fetch(`${BASE_URL}/laporan/${id}`);
+  return res.json();
+};
+
+export const getPhotosByReport = async (id) => {
+  const res = await fetch(`${BASE_URL}/laporan/${id}/photos`);
+  return res.json();
+};
+
 export const deleteLaporan = async (id) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/laporan/${id}`, {
