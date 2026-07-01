@@ -1,17 +1,11 @@
 const express = require("express");
 const router  = express.Router();
 const laporanController   = require("../controllers/laporanController");
-const authController      = require("../controllers/authController");
 const dashboardController = require("../controllers/dashboardController");
 const userController      = require("../controllers/userController");
 const { verifyToken, verifyAdmin } = require("../middleware/authMiddleware");
 const upload        = require("../middleware/uploadMiddleware");
 const authorizeRole = require("../middleware/roleMiddleware");
-
-// ── Auth ─────────────────────────────────────────────────
-router.post("/auth/register", authController.register);
-router.post("/auth/login",    authController.login);
-router.get( "/auth/me",       verifyToken, authController.getMe);
 
 // ── Laporan ───────────────────────────────────────────────
 router.get(   "/laporan",            laporanController.index);

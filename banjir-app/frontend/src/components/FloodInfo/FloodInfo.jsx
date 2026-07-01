@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getDashboardStats } from "../../services/api";
+import { getDashboardStats, isLoggedIn } from "../../services/api";
 import styles from "./FloodInfo.module.css";
 
 function FloodInfo() {
@@ -9,12 +9,12 @@ function FloodInfo() {
   });
 
   useEffect(() => {
-    // Ambil stats — kalau belum login token kosong, tapi coba dulu
+    if (!isLoggedIn()) return;
     getDashboardStats()
       .then(data => {
         if (data.total_laporan !== undefined) setStats(data);
       })
-      .catch(() => {}); // gagal = tetap tampil "-"
+      .catch(() => {});
   }, []);
 
   return (

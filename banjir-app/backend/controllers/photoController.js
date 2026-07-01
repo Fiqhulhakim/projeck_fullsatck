@@ -1,39 +1,53 @@
-const multer = require("multer");
-const path   = require("path");
-const fs     = require("fs");
+const PhotoModel = require("../models/photoModels");
+const fs   = require("fs");
+const path = require("path");
 
-// Pastikan folder uploads ada
-const uploadDir = path.join(__dirname, "../public/uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+class PhotoController {
+
+  async getByReport(req, res) {
+    try {
+      const reportId = req.params.id;
+      const photos = await PhotoModel.getByReportId(reportId);
+      res.json({ message: "Berhasil mengambil foto", data: photos });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal mengambil foto", error: error.message });
+    }
+  }
+
+  async upload(req, res) {
+    try {
+      const reportId = req.params.id;
+      if (!req.file) {
+        return res.status(400).json({ message: "Tidak ada file yang diupload" });
+      }
+      const photoUrl = `/uploads/${req.file.filename}`;
+      await PhotoModel.create({ report_id: reportId, photo_url: photoUrl });
+      res.status(201).json({ message: "Foto berhasil diupload", photo_url: photoUrl });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal upload foto", error: error.message });
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const photoId = req.params.id;
+      const [rows] = await require("../config/database").query(
+        `SELECT * FROM photos WHERE id = ?`, [photoId]
+      );
+      const photo = rows[0];
+      if (!photo) {
+        return res.status(404).json({ message: "Foto tidak ditemukan" });
+      }
+      const filePath = path.join(__dirname, "../public", photo.photo_url);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      await PhotoModel.delete(photoId);
+      res.json({ message: "Foto berhasil dihapus" });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal menghapus foto", error: error.message });
+    }
+  }
 }
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const ext      = path.extname(file.originalname);
-    const filename = `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
-    cb(null, filename);
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  const allowed = [".jpg", ".jpeg", ".png", ".webp"];
-  const ext = path.extname(file.originalname).toLowerCase();
-
-  if (allowed.includes(ext)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Hanya file gambar (jpg, jpeg, png, webp) yang diizinkan"), false);
-  }
-};
-
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // max 5MB
-});
-
-module.exports = upload;
+module.exports = new PhotoController();

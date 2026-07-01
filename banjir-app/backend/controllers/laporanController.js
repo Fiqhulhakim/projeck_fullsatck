@@ -28,10 +28,10 @@ class LaporanController {
   // POST /api/laporan
   async store(req, res) {
     try {
-      const { title, description, water_level, latitude, longitude, address } = req.body;
+      const { title, description, water_level, wilayah, latitude, longitude, address } = req.body;
       const user_id = req.user.id;
 
-      const dataLaporan = { title, description, water_level, user_id };
+      const dataLaporan = { title, description, water_level, wilayah, user_id };
 
       const errors = validateLaporan(dataLaporan);
       if (errors.length > 0) return res.status(400).json({ errors });

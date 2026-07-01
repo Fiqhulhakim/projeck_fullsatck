@@ -29,7 +29,7 @@ function Footer() {
               </div>
               <div>
                 <p className={styles.brandTitle}>Sistem Pelaporan Banjir</p>
-                <p className={styles.brandSub}>Badan Penanggulangan Daerah</p>
+                <p className={styles.brandSub}>Platform Pelaporan Banjir Berbasis Web</p>
               </div>
             </div>
             <p className={styles.desc}>
@@ -84,8 +84,8 @@ function Footer() {
         {/* Bottom bar */}
         <div className={styles.bottom}>
           <p className={styles.copy}>
-            © 2024 Sistem Pelaporan Banjir · Dikembangkan oleh{" "}
-            <strong>Kelompok Fullstack App</strong>
+            © 2026 Sistem Pelaporan Banjir · Dikembangkan oleh{" "}
+            <strong>Kelompok Beng Beng</strong> · Pemrograman Fullstack
           </p>
           <div className={styles.badge}>
             <i className="ti ti-code" aria-hidden="true" />

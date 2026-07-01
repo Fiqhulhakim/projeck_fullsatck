@@ -28,7 +28,7 @@ function Navbar() {
           </div>
           <div className={styles.brandText}>
             <span className={styles.brandTitle}>Sistem Pelaporan Banjir</span>
-            <span className={styles.brandSub}>Badan Penanggulangan Daerah</span>
+            <span className={styles.brandSub}>Platform Pelaporan Banjir Berbasis Web</span>
           </div>
         </div>
 
