@@ -31,7 +31,7 @@ class LaporanController {
       const { title, description, water_level, wilayah, latitude, longitude, address } = req.body;
       const user_id = req.user.id;
 
-      const dataLaporan = { title, description, water_level, wilayah, user_id };
+      const dataLaporan = { title, description, water_level, wilayah, user_id, status: 'pending' };
 
       const errors = validateLaporan(dataLaporan);
       if (errors.length > 0) return res.status(400).json({ errors });
@@ -70,7 +70,11 @@ class LaporanController {
       if (req.user.role !== "admin" && laporan.user_id !== req.user.id) {
         return res.status(403).json({ message: "Anda tidak berhak mengubah laporan ini" });
       }
-      await LaporanModel.update(req.params.id, req.body);
+      const updateData = { ...req.body };
+      if (req.user.role !== "admin") {
+        delete updateData.status;
+      }
+      await LaporanModel.update(req.params.id, updateData);
       res.json({ message: "Data laporan berhasil diperbarui" });
     } catch (error) {
       res.status(500).json({ error: error.message });

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createLaporan, isLoggedIn } from "../../services/api";
-import { WILAYAH_DEPOK, STATUS_BANJIR } from "../../utils/constant/data";
+import { WILAYAH_DEPOK } from "../../utils/constant/data";
 import styles from "./ReportForm.module.css";
 
 function ReportForm() {
@@ -13,7 +13,7 @@ function ReportForm() {
   const [preview, setPreview] = useState(null);
   const [form, setForm]       = useState({
     title: "", wilayah: "", description: "",
-    water_level: "", status: "pending", address: "",
+    water_level: "", address: "",
   });
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -45,7 +45,6 @@ function ReportForm() {
       formData.append("wilayah",     form.wilayah);
       formData.append("description", form.description);
       formData.append("water_level", form.water_level);
-      formData.append("status",      form.status);
       if (form.address) formData.append("address", form.address);
       if (foto)         formData.append("photo",   foto);
 
@@ -108,19 +107,10 @@ function ReportForm() {
               value={form.title} onChange={handleChange} required />
           </div>
 
-          <div className={styles.row2}>
-            <div className={styles.field}>
-              <label><i className="ti ti-alert-triangle" />Status</label>
-              <select name="status" value={form.status} onChange={handleChange}>
-                <option value="pending">Belum diverifikasi</option>
-                {STATUS_BANJIR.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-              </select>
-            </div>
-            <div className={styles.field}>
-              <label><i className="ti ti-home" />Alamat</label>
-              <input type="text" name="address" placeholder="Jl. Margonda No.100"
-                value={form.address} onChange={handleChange} />
-            </div>
+          <div className={styles.field}>
+            <label><i className="ti ti-home" />Alamat</label>
+            <input type="text" name="address" placeholder="Jl. Margonda No.100"
+              value={form.address} onChange={handleChange} />
           </div>
 
           <div className={styles.field}>

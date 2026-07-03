@@ -117,7 +117,7 @@ function Dashboard() {
 
   const getDisplayStatus = useCallback((report) => {
     const s = report.status;
-    if (s === "pending" || s === "verified" || s === "rejected") {
+    if (s === "verified") {
       return waterLevelToStatus(report.water_level);
     }
     return s;

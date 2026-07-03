@@ -8,12 +8,13 @@ const statusConfig = {
   siaga:    { cls: styles.siaga,    label: "Siaga"    },
   waspada:  { cls: styles.waspada,  label: "Waspada"  },
   aman:     { cls: styles.aman,     label: "Aman"     },
-  verified: { cls: styles.verified, label: "Verified" },
+  verified: { cls: styles.verified, label: "Terverifikasi" },
+  rejected: { cls: styles.rejected, label: "Ditolak" },
 };
 
 function getDisplayStatus(report) {
   const s = report.status?.toLowerCase() ?? "pending";
-  if (s === "pending" || s === "verified" || s === "rejected") {
+  if (s === "verified") {
     return waterLevelToStatus(report.water_level);
   }
   return s;

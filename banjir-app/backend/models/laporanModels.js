@@ -48,13 +48,13 @@ class LaporanModel {
         return result;
     }
 
-    // 🔥 UPDATE (FIX — TANPA SET ?)
     static async update(id, data) {
-        const { title, description, wilayah, water_level, status } = data;
+        const { title, description, wilayah, water_level } = data;
+        const status = data.status || undefined;
 
         const sql = `
             UPDATE reports 
-            SET title = ?, description = ?, wilayah = ?, water_level = ?, status = ?
+            SET title = ?, description = ?, wilayah = ?, water_level = ?, status = COALESCE(?, status)
             WHERE id = ?
         `;
 
@@ -63,7 +63,7 @@ class LaporanModel {
             description,
             wilayah || null,
             water_level,
-            status || 'pending',
+            status || null,
             id
         ];
 

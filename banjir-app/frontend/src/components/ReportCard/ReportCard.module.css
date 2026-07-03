@@ -27,6 +27,7 @@
 .aman    .topAccent { background: #38a169; }
 .pending  .topAccent { background: #718096; }
 .verified .topAccent { background: #6b46c1; }
+.rejected .topAccent { background: #e53e3e; }
 
 .body {
   padding: 0.9rem 1rem;
@@ -101,6 +102,7 @@
 .badge.aman    { background: #f0fff4; color: #276749; border-color: #c6f6d5; }
 .badge.pending  { background: #f7fafc; color: #4a5568; border-color: #e2e8f0; }
 .badge.verified { background: #faf5ff; color: #553c9a; border-color: #e9d8fd; }
+.badge.rejected { background: #fff5f5; color: #c53030; border-color: #fed7d7; }
 
 .waterLevel {
   font-size: 0.75rem;
